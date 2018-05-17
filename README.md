@@ -1,6 +1,6 @@
-# xs-zeromq-base
+# xs-zeromq-node-base
 
-> Build zeromq-base image (for node)
+> Build zeromq-node-base image (for node)
 
 ## Make Syntax
 ```sh

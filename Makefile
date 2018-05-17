@@ -3,12 +3,11 @@
 # For managing the zeromq-base image
 #
 org := xybersolve
-base_image := zeromq-base:latest
-project := xs-zeromq
+base_image := zeromq-node-base:latest
+project := xs-zeromq-node-base
 git_hash := $(shell git rev-parse HEAD)
 # beginning of commit hash, is all we really need
 git_start := $(shell echo $(git_hash) | cut -c1-7)
-#git_start := $(shell ${githash:0:5})
 
 build: ## Build base image, used across all example sub-projects
 	docker build --tag $(base_image) --file ./Dockerfile.base .
@@ -35,7 +34,7 @@ hash: ## Show the shortened git commit hash, used in tag
 	@echo $(git_start)
 
 archive: ## Archive the 'zeromq-base' image
-	docker save -o ../image-archive/zeromq-base.tar zeromq-base
+	docker save -o ../image-archive/$(base_image).tar $(base_image)
 
 help: ## This help file
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
