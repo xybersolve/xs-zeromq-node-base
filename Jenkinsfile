@@ -7,6 +7,7 @@ pipeline {
             steps {
                 echo "Clean Workspace"
                 cleanWs()
+                sh 'make clean'
             }
         }
 
@@ -17,7 +18,7 @@ pipeline {
               //  $class: 'GitSCM', branches: [[name: '*/master']],
               //  userRemoteConfigs: [[url: 'https://github.com/xybersolve/xs-zeromq-node-base.git'],[credentialsId:'xybersolve-github-keys']]
               //])
-              
+              // use Jenkins registered credentials
               checkout scm
               // stash includes: '**/*', name: 'app'
             }

@@ -27,8 +27,8 @@ login: ## Login to docker hub
 	@docker login -u $(user) -p $(pass)
 
 push:  ## Push to DockerHub, requires prior login
-	@echo @docker push $(ORG)/$(IMAGE):$(GIT_SHORT)
-	@echo @docker push $(ORG)/$(IMAGE):latest
+	@docker push $(ORG)/$(IMAGE):$(GIT_SHORT)
+	@docker push $(ORG)/$(IMAGE):latest
 
 pull: ## Pull the base image, from docker hub
 	@docker pull $(ORG)/$(IMAGE):latest
