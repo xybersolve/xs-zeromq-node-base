@@ -4,15 +4,11 @@
 #
 # include project specifics
 include env.mk
+#GIT_LONG := $(shell git log -1 --pretty=%H)
+GIT_SHORT := $(shell git log -1 --pretty=%h)
 
-GIT_HASH := $(shell git rev-parse HEAD)
-# beginning of commit hash, is all we need
-GIT_SHORT := $(shell echo $(git_hash) | cut -c1-7)
-# full or abbreviated version of git hash
-GIT_TAG := $(GIT_SHORT)
-
-# assign docker login from environment
-# wills be overwritten by Jenkins
+# assign docker login from environment, for terminal make
+# overwritten by Jenkins credentials, for jenkins make
 user := ${DOCKER_USER}
 pass := ${DOCKER_PASS}
 
@@ -23,7 +19,7 @@ ssh: ## SSH into the base image
 	@docker run -it --rm $(IMAGE) /bin/bash
 
 tag: ## Tag the base image for deployment to DockerHub
-	@docker tag $(IMAGE) $(ORG)/$(IMAGE):$(git_tag)
+	@docker tag $(IMAGE) $(ORG)/$(IMAGE):$(GIT_SHORT)
 	@docker tag $(IMAGE) $(ORG)/$(IMAGE):latest
 
 login: ## Login to docker hub
@@ -31,8 +27,8 @@ login: ## Login to docker hub
 	@docker login -u $(user) -p $(pass)
 
 push:  ## Push to DockerHub, requires prior login
-	@docker push $(ORG)/$(IMAGE):$(git_tag)
-	@docker push $(ORG)/$(IMAGE):latest
+	@echo @docker push $(ORG)/$(IMAGE):$(GIT_SHORT)
+	@echo @docker push $(ORG)/$(IMAGE):latest
 
 pull: ## Pull the base image, from docker hub
 	@docker pull $(ORG)/$(IMAGE):latest
