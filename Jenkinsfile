@@ -7,7 +7,7 @@ pipeline {
             steps {
                 echo "Clean Workspace"
                 cleanWs()
-                sh 'make clean' | true
+                sh 'make clean || true'
             }
         }
 
