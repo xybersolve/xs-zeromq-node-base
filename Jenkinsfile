@@ -13,11 +13,12 @@ pipeline {
         stage('Checkout') {
             steps {
               echo "Checkout"
-              checkout([
-                $class: 'GitSCM', branches: [[name: '*/master']],
-                userRemoteConfigs: [[url: 'https://github.com/xybersolve/xs-zeromq-node-base.git'],[credentialsId:'xybersolve-github-keys']]
-              ])
-              // checkout scm
+              //checkout([
+              //  $class: 'GitSCM', branches: [[name: '*/master']],
+              //  userRemoteConfigs: [[url: 'https://github.com/xybersolve/xs-zeromq-node-base.git'],[credentialsId:'xybersolve-github-keys']]
+              //])
+              
+              checkout scm
               // stash includes: '**/*', name: 'app'
             }
         }
