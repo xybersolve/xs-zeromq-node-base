@@ -1,6 +1,6 @@
 #
-# Project Specifics   
+# Project Specifics
 #
 ORG := xybersolve
-IMAGE := zeromq-base
-PROJECT := zeromq-node-base
+IMAGE := xs-zeromq-node-base
+PROJECT := xs-zeromq-node-base

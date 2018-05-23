@@ -1,6 +1,7 @@
-.PHONY: build clean ssh tag login push pull clean hash archive help list list_
+.PHONY: build clean ssh tag login push pull clean repo archive help list list_
 #
 # Manage zeromq-node-base image build and archive
+#  - reusable Makefile, with env.mk defining specifics
 #
 # include project specifics
 include env.mk
@@ -16,7 +17,8 @@ build: ## Build base image, used across all example sub-projects
 	@docker build --tag $(IMAGE) --file ./Dockerfile.base .
 
 ssh: ## SSH into the base image
-	@docker run -it --rm $(IMAGE) /bin/bash
+	#@docker run -it --rm $(IMAGE) /bin/bash
+	@docker run -it --rm $(ORG)/$(IMAGE):latest /bin/bash
 
 tag: ## Tag the base image for deployment to DockerHub
 	@docker tag $(IMAGE) $(ORG)/$(IMAGE):$(GIT_SHORT)
@@ -37,8 +39,9 @@ clean: ## Delete the base image
 	#docker rm --force $(CON)
 	@docker rmi --force $(IMAGE)
 
-hash: ## Show the shortened git commit hash, used in tag
-	@echo $(GIT_TAG)
+repo: ## Show the shortened git commit hash, used in tag
+	@echo $(ORG)/$(IMAGE):$(GIT_SHORT)
+	@echo $(ORG)/$(IMAGE):latest
 
 archive: ## Archive the 'zeromq-base' image
 	@docker save -o ../image-archive/$(IMAGE).tar $(IMAGE)

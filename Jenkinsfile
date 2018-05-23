@@ -5,7 +5,6 @@ pipeline {
     stages {
         stage('Pre-Clean') {
             steps {
-                echo "Clean Workspace"
                 cleanWs()
                 sh 'make clean || true'
             }
@@ -13,13 +12,15 @@ pipeline {
 
         stage('Checkout') {
             steps {
-              echo "Checkout"
+              // inline use checkout method
               //checkout([
               //  $class: 'GitSCM', branches: [[name: '*/master']],
               //  userRemoteConfigs: [[url: 'https://github.com/xybersolve/xs-zeromq-node-base.git'],[credentialsId:'xybersolve-github-keys']]
               //])
-              // use Jenkins registered credentials
+
+              // Jenkinsfile use registered credentials
               checkout scm
+
               // stash includes: '**/*', name: 'app'
             }
         }
@@ -27,7 +28,6 @@ pipeline {
         stage('Build') {
             steps {
                 // unstash 'app'
-                echo 'Building..'
                 sh 'make build'
             }
         }
@@ -35,7 +35,6 @@ pipeline {
         stage('Tag') {
             steps {
                 // unstash 'app'
-                echo 'Tag & Push..'
                 sh 'make tag'
             }
         }
