@@ -1,4 +1,4 @@
-.PHONY: build clean ssh tag login push pull clean repo archive help list list_
+.PHONY: build clean ssh tag login push pull test clean repo archive help list list_
 #
 # Manage zeromq-node-base image build and archive
 #  - reusable Makefile, with env.mk defining specifics
@@ -13,33 +13,48 @@ GIT_SHORT := $(shell git log -1 --pretty=%h)
 user := ${DOCKER_USER}
 pass := ${DOCKER_PASS}
 
+# Info messaging makefile
+include info.mk
+
 build: ## Build base image, used across all example sub-projects
+	${INFO} "Building base image..."
 	@docker build --tag $(IMAGE) --file ./Dockerfile.base .
 
 ssh: ## SSH into the base image
+	${INFO} "SSH into base image..."
 	#@docker run -it --rm $(IMAGE) /bin/bash
 	@docker run -it --rm $(ORG)/$(IMAGE):latest /bin/bash
 
 tag: ## Tag the base image for deployment to DockerHub
+	${INFO} "Tagging base image..."
 	@docker tag $(IMAGE) $(ORG)/$(IMAGE):$(GIT_SHORT)
 	@docker tag $(IMAGE) $(ORG)/$(IMAGE):latest
 
 login: ## Login to docker hub
+	${INFO} "Logging into DockerHub..."
 	# from terminal or Jenkins Credentials
 	@docker login -u $(user) -p $(pass)
 
 push:  ## Push to DockerHub, requires prior login
+	${INFO} "Push"
 	@docker push $(ORG)/$(IMAGE):$(GIT_SHORT)
 	@docker push $(ORG)/$(IMAGE):latest
 
 pull: ## Pull the base image, from docker hub
+	${INFO} "Pull latest base image..."
 	@docker pull $(ORG)/$(IMAGE):latest
 
+test: ## Run tests
+	${INFO} "Testing something or other..."
+	@echo "Run our tests"
+
 clean: ## Delete the base image
+	${INFO} "Clean image cache..."
 	#docker rm --force $(CON)
 	@docker rmi --force $(IMAGE)
 
 repo: ## Show the shortened git commit hash, used in tag
+	${INFO} "Base image repo tagged name..."
 	@echo $(ORG)/$(IMAGE):$(GIT_SHORT)
 	@echo $(ORG)/$(IMAGE):latest
 

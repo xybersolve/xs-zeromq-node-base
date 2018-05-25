@@ -29,9 +29,20 @@ pipeline {
             steps {
                 // unstash 'app'
                 sh 'make build'
+
+                // app = docker.build("ajeetraina/webpage")
             }
         }
 
+        stage('Test') {
+          steps {
+            /*
+              app.inside {
+                sh 'echo "Tests passed"'
+            }
+            */
+          }
+        }
         stage('Tag') {
             steps {
                 // unstash 'app'
@@ -45,16 +56,24 @@ pipeline {
               sh "make login user=${env.dockerHubUser} pass=${env.dockerHubPassword}"
               sh 'make push'
             }
+            /*
+            docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+              app.push("${env.BUILD_NUMBER}")
+              app.push("latest")
+            }
+            */
           }
         }
 
+// if clean - leave .git for polling
+/*
         stage('Post-Clean') {
           steps {
               echo "Clean Workspace"
               cleanWs()
           }
         }
-
+*/
         stage('Info') {
             steps {
                 echo "JOB_NAME: ${env.JOB_NAME}"
