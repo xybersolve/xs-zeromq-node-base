@@ -1,5 +1,3 @@
-#!/usr/bin/env groovy
-
 pipeline {
     agent any
     stages {
@@ -12,68 +10,38 @@ pipeline {
 
         stage('Checkout') {
             steps {
-              // inline use checkout method
-              //checkout([
-              //  $class: 'GitSCM', branches: [[name: '*/master']],
-              //  userRemoteConfigs: [[url: 'https://github.com/xybersolve/xs-zeromq-node-base.git'],[credentialsId:'xybersolve-github-keys']]
-              //])
-
-              // Jenkinsfile use registered credentials
               checkout scm
-
-              // stash includes: '**/*', name: 'app'
             }
         }
 
         stage('Build') {
             steps {
-                // unstash 'app'
                 sh 'make build'
-
-                // app = docker.build("ajeetraina/webpage")
             }
         }
 
         stage('Test') {
           steps {
-            /*
-              app.inside {
-                sh 'echo "Tests passed"'
-            }
-            */
+            sh 'echo "Run Tests"'
           }
         }
+
         stage('Tag') {
             steps {
-                // unstash 'app'
                 sh 'make tag'
             }
         }
 
         stage('Docker Push') {
           steps {
+            // Jenkins withCredentials and make
             withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
               sh "make login user=${env.dockerHubUser} pass=${env.dockerHubPassword}"
               sh 'make push'
             }
-            /*
-            docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-              app.push("${env.BUILD_NUMBER}")
-              app.push("latest")
-            }
-            */
           }
         }
 
-// if clean - leave .git for polling
-/*
-        stage('Post-Clean') {
-          steps {
-              echo "Clean Workspace"
-              cleanWs()
-          }
-        }
-*/
         stage('Info') {
             steps {
                 echo "JOB_NAME: ${env.JOB_NAME}"
