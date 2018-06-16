@@ -21,9 +21,9 @@ pipeline {
         }
 
         stage('Test') {
-          steps {
-            sh 'echo "Run Tests"'
-          }
+            steps {
+                sh 'echo "Run Tests"'
+            }
         }
 
         stage('Tag') {
@@ -32,7 +32,7 @@ pipeline {
             }
         }
 
-        stage('Docker Push') {
+        stage('DockerHub Push') {
           steps {
             // Jenkins withCredentials and make
             withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {

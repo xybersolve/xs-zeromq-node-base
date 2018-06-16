@@ -18,3 +18,5 @@ ssh        SSH into the base image
 tag        Tag the base image for deployment to DockerHub
 
 ```
+
+## [License](LICENSE.md)
