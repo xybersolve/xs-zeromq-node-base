@@ -17,7 +17,11 @@ GIT_SHORT := $(shell git log -1 --pretty=%h)
 # overwritten by Jenkins credentials, for jenkins make
 user := ${DOCKER_USER}
 pass := ${DOCKER_PASS}
-
+#
+# -------------------------------------------
+# Jenkins routines start here
+#   * docker only Jenkins routines
+#
 clean: ## Delete the base image
 	${INFO} "Clean image cache..."
 	#docker rm --force $(CON)
@@ -44,7 +48,10 @@ push:  ## Push to DockerHub, requires prior login
 	${INFO} "Push"
 	@docker push $(ORG)/$(IMAGE):$(GIT_SHORT)
 	@docker push $(ORG)/$(IMAGE):latest
-
+#
+# Jenkins routines end here
+# -------------------------------------------
+#
 ssh: ## SSH into the base image
 	${INFO} "SSH into base image..."
 	#@docker run -it --rm $(IMAGE) /bin/bash

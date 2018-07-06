@@ -1,6 +1,7 @@
 # xs-zeromq-node-base
 
-> Build zeromq-node-base image (for node)
+> Jenkins automated build for docker node base image for zeromq
+(intra-microservice communication queue).
 
 ## Make Syntax
 ```sh
