@@ -6,14 +6,13 @@ jobs:
     working_directory: ~/zeromq-node-base
     environment:
     - DOCKER_IMAGE: xybersolve/zeromq-node-base
+    - DOCKER_FILE: Dockerfile.base
     - VERSION_PREFIX: 1.0
     steps:
     - checkout
-    - run: Set Environment Variables
-      command:
-    - run:
-        name: Build image
-        command: docker build -t ${DOCKER_IMAGE} .
+    # - run:
+    #     name: Build image
+    #     command: docker build -t ${DOCKER_IMAGE} -f ${DOCKER_FILE} .
     - run:
         name: Tag and deploy image to docker hub
         command: |
