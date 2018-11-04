@@ -1,5 +1,7 @@
 # xs-zeromq-node-base
 
+> CircleCi automated build and push to DockerHub
+
 > Jenkins automated build for docker node base image for zeromq
 (intra-microservice communication queue).
 
