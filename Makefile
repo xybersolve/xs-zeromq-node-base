@@ -16,10 +16,11 @@ GIT_SHORT := $(shell git log -1 --pretty=%h)
 # assign docker login from environment, for terminal make
 # overwritten by Jenkins credentials, for jenkins make
 user := ${DOCKER_USER}
-pass := ${DOCKER_PASS}
+pass := ${DOCKER_PASSWORD}
+
 #
 # -------------------------------------------
-# Jenkins routines start here
+# CI routines start here
 #   * docker only Jenkins routines
 #
 clean: ## Delete the base image
@@ -32,7 +33,7 @@ build: ## Build base image, used across all example sub-projects
 	@docker build --tag $(IMAGE) --file ./Dockerfile.base .
 
 test:
-	echo "Unit & smoke test here..."
+	@echo "Unit & smoke test here..."
 
 tag: ## Tag the base image for deployment to DockerHub
 	${INFO} "Tagging base image..."
@@ -42,8 +43,8 @@ tag: ## Tag the base image for deployment to DockerHub
 login: ## Login to docker hub
 	${INFO} "Logging into DockerHub..."
 	# from terminal or Jenkins Credentials
-	#@docker login -u $(user) -p $(pass)
-	@docker login -u $(DOCKER_USER) -p $(DOCKER_PASSWORD)
+	@docker login -u $(user) -p $(pass)
+	#@docker login -u $(DOCKER_USER) -p $(DOCKER_PASSWORD)
 
 push:  ## Push to DockerHub, requires prior login
 	${INFO} "Push"
@@ -52,9 +53,8 @@ push:  ## Push to DockerHub, requires prior login
 
 deploy: build tag login push ## Build and deploy to DockerHub
 
-
 #
-# Jenkins routines end here
+# Support routines below
 # -------------------------------------------
 #
 ssh: ## SSH into the base image
@@ -65,10 +65,6 @@ ssh: ## SSH into the base image
 pull: ## Pull the base image, from docker hub
 	${INFO} "Pull latest base image..."
 	@docker pull $(ORG)/$(IMAGE):latest
-
-test: ## Run tests
-	${INFO} "Testing something or other..."
-	@echo "Run our tests"
 
 
 repo: ## Show the shortened git commit hash, used in tag
