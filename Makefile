@@ -1,4 +1,4 @@
-.PHONY: clean build test tag login push \
+.PHONY: clean build test tag login push deploy \
 	ssh pull repo archive help list list_
 #
 # Manage zeromq-node-base image build and archive
@@ -42,12 +42,17 @@ tag: ## Tag the base image for deployment to DockerHub
 login: ## Login to docker hub
 	${INFO} "Logging into DockerHub..."
 	# from terminal or Jenkins Credentials
-	@docker login -u $(user) -p $(pass)
+	#@docker login -u $(user) -p $(pass)
+	@docker login -u $(DOCKER_USER) -p $(DOCKER_PASSWORD)
 
 push:  ## Push to DockerHub, requires prior login
 	${INFO} "Push"
 	@docker push $(ORG)/$(IMAGE):$(GIT_SHORT)
 	@docker push $(ORG)/$(IMAGE):latest
+
+deploy: build tag login push ## Build and deploy to DockerHub
+
+
 #
 # Jenkins routines end here
 # -------------------------------------------
